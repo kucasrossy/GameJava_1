@@ -13,6 +13,10 @@ public class Menu {
 	
 	public boolean up,down,action;
 	
+	public Menu() {
+		Soud.musicBack.loop();
+	}
+	
 	public void tick() {
 		if(up) {
 			up = false;
@@ -36,6 +40,7 @@ public class Menu {
 				case "Novo Jogo":
 				case "Carregar Jogo":
 					Game.gameState = "Normal";
+					Soud.musicBack.stop();
 				break;
 				case "Fechar":
 					System.exit(1);

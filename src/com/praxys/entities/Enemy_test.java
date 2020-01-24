@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.praxys.main.Game;
+import com.praxys.main.Soud;
 import com.praxys.word.Camera;
 import com.praxys.word.Word;
 
@@ -45,6 +46,7 @@ public class Enemy_test extends Entity {
 		}else {
 			//Colisão com o player
 			if(Game.rand.nextInt(100)  < 5) {
+				Soud.musicHurt.play();
 				Game.player.vida-= Game.rand.nextInt(5);
 				Game.player.isDamaged = true;
 			}
