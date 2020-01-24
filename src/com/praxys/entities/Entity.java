@@ -1,6 +1,6 @@
 package com.praxys.entities;
 
-import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -83,8 +83,8 @@ public class Entity {
 	}
 	
 	public void render(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillRect(getX() + maskX - Camera.x, getY() + maskY - Camera.y,maskW,maskH);
+		/*g.setColor(Color.RED);
+		g.fillRect(getX() + maskX - Camera.x, getY() + maskY - Camera.y,maskW,maskH);*/
 		g.drawImage(sprite, getX() - Camera.x, getY() - Camera.y, null);
 	}
 }

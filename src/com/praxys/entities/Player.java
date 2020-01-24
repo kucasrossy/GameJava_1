@@ -86,8 +86,9 @@ public class Player extends Entity{
 		
 		if(vida<=0) {
 			//Game Over
-			//Word.restarGame("level1.png");
+			vida = 0;
 			Game.gameState = "GameOver";
+			Game.isOver = true;
 		}
 		
 		if(shooting) {
@@ -109,7 +110,6 @@ public class Player extends Entity{
 				}
 				BulletShoot bullet = new BulletShoot(this.getX()+px,this.getY()+py,3,3,null,dx,0);
 				Game.bullets.add(bullet);
-				System.out.println("Atirando!");
 			}
 		}
 		

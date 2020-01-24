@@ -47,10 +47,6 @@ public class Enemy_test extends Entity {
 			if(Game.rand.nextInt(100)  < 5) {
 				Game.player.vida-= Game.rand.nextInt(5);
 				Game.player.isDamaged = true;
-				if(Game.player.vida<=0) {
-					//Game Over
-				}
-				System.out.println("Vida do Player: " + Game.player.vida);
 			}
 		}
 		

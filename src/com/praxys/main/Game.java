@@ -36,7 +36,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private Thread thread;
 	public final static int WIDTH = 240;
 	public final static int HEIGHT = 160;
-	private final int SCALE = 3;
+	public final static int SCALE = 3;
 	
 	private BufferedImage image;
 	
@@ -50,7 +50,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	
 	public static Random rand;
 	
-	public static String gameState = "GameOver";
+	private Menu menu;
+	
+	public static String gameState = "Menu";
+	private boolean showMessageGameOver = true;
+	private int frameGameOver = 0;
+	public static boolean isOver = false;
+	private int pause = 1;
 	
 	public UI ui;
 	
@@ -71,10 +77,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		this.addKeyListener(this);
 		entitys.add(player);
 		word = new Word("/level1.png");
+		
+		
+		menu = new Menu();
 	}
 	
 	public void initFrame() {
-		frame = new JFrame("Game #1");
+		frame = new JFrame("StarShooting");
 		frame.add(this);
 		frame.setResizable(false);
 		frame.pack();
@@ -106,28 +115,45 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	
 	public void tick() {
 		
+		
 		if(gameState == "Normal") {
-			for(int i = 0; i<entitys.size();i++) {
-				Entity e = entitys.get(i);
-				e.tick();
-			}
-			for(int i = 0; i < bullets.size(); i++) {
-				bullets.get(i).tick();
-			}
-			
-			if(enemys.size() == 0) {
-				//Passando de Nivel
-				cur_Level++;
-				if(cur_Level > max_Level) {
-					cur_Level = 1;
+			if(pause==1) {
+				for(int i = 0; i<entitys.size();i++) {
+					Entity e = entitys.get(i);
+					e.tick();
+				}
+				for(int i = 0; i < bullets.size(); i++) {
+					bullets.get(i).tick();
 				}
 				
-				String newWorld = "level"+cur_Level+".png";
-				Word.restarGame(newWorld);
+				if(enemys.size() == 0) {
+					//Passando de Nivel
+					cur_Level++;
+					if(cur_Level > max_Level) {
+						cur_Level = 1;
+					}
+					
+					String newWorld = "level"+cur_Level+".png";
+					Word.restarGame(newWorld);
+				}
 			}
 		}else if(gameState == "GameOver") {
 			//Game Over;
-			System.out.println("Game Over!");
+			if(!isOver) {
+				gameState = "Normal";
+				Word.restarGame("level1.png");
+			}
+			frameGameOver++;
+			if(frameGameOver > 50) {
+				frameGameOver = 0;
+				if(showMessageGameOver) {
+					showMessageGameOver = false;
+				}else {
+					showMessageGameOver = true;
+				}
+			}
+		}else if(gameState == "Menu") {
+			menu.tick();
 		}
 	
 	}
@@ -166,8 +192,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
 			g2.setFont(new Font("ARIAL",Font.BOLD,50));
 			g2.setColor(Color.RED);
-			g.drawString("Você Perdeu",235, HEIGHT*SCALE/2);
+			g2.drawString("Você Perdeu",235, HEIGHT*SCALE/2 - 50);
+			if(showMessageGameOver) {
+				g2.drawString("<<Aperte Enter>>", 190, HEIGHT*SCALE/2 +50);
+			}
 			
+		}else if(gameState == "Menu") {
+			menu.render(g);
 		}
 		bs.show();
 	}
@@ -215,12 +246,31 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		
 		if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			player.cima = true;
+			
+			if(gameState == "Menu") {
+				menu.up = true;
+			}
 		}else if(e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			player.baixo = true;
+			
+			if(gameState == "Menu") {
+				menu.down = true;
+			}
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_J && player.hasGun) {
 			player.shooting = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_ENTER && (gameState == "GameOver" || gameState == "Menu")) {
+			isOver = false;
+			if(gameState == "Menu") {
+				menu.action = true;
+			}
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			pause = pause*-1;
 		}
 		
 	}
