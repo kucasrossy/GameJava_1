@@ -11,7 +11,7 @@ public class Menu {
 	private int currentOption = 0;
 	private int maxOption = options.length - 1;
 	
-	public boolean up,down,action;
+	public boolean up,down,action,isOn;
 	
 	public Menu() {
 		Soud.musicBack.loop();
@@ -35,6 +35,7 @@ public class Menu {
 		}
 		
 		if(action) {
+			action = false;
 			option = options[currentOption];
 			switch(option) {
 				case "Novo Jogo":
@@ -50,13 +51,19 @@ public class Menu {
 	}
 	
 	public void render(Graphics g) {
+	    if(!isOn)
 		g.setColor(Color.RED);
+	    else
+		g.setColor(new Color(0,50,0,100));
 		g.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE);
 		g.setColor(Color.YELLOW);
 		g.setFont(new Font("arial",Font.BOLD,35));
 		g.drawString(">>StarShooting<<",225, 80);
 		g.setFont(new Font("arial",Font.BOLD,30));
+		if(!isOn)
 		g.drawString("Novo Jogo", 275, 175);
+		else
+		g.drawString("Continuar", 275, 175);	
 		g.drawString("Carregar Jogo", 255, 275);
 		g.drawString("Sair", 322, 375);
 		

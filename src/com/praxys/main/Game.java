@@ -56,7 +56,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private boolean showMessageGameOver = true;
 	private int frameGameOver = 0;
 	public static boolean isOver = false;
-	private int pause = 1;
 	
 	public UI ui;
 	
@@ -117,25 +116,23 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		
 		
 		if(gameState == "Normal") {
-			if(pause==1) {
-				for(int i = 0; i<entitys.size();i++) {
-					Entity e = entitys.get(i);
-					e.tick();
-				}
-				for(int i = 0; i < bullets.size(); i++) {
-					bullets.get(i).tick();
+			for(int i = 0; i<entitys.size();i++) {
+				Entity e = entitys.get(i);
+				e.tick();
+			}
+			for(int i = 0; i < bullets.size(); i++) {
+				bullets.get(i).tick();
+			}
+			
+			if(enemys.size() == 0) {
+				//Passando de Nivel
+				cur_Level++;
+				if(cur_Level > max_Level) {
+					cur_Level = 1;
 				}
 				
-				if(enemys.size() == 0) {
-					//Passando de Nivel
-					cur_Level++;
-					if(cur_Level > max_Level) {
-						cur_Level = 1;
-					}
-					
-					String newWorld = "level"+cur_Level+".png";
-					Word.restarGame(newWorld);
-				}
+				String newWorld = "level"+cur_Level+".png";
+				Word.restarGame(newWorld);
 			}
 		}else if(gameState == "GameOver") {
 			//Game Over;
@@ -270,7 +267,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			pause = pause*-1;
+			gameState = "Menu";
+			menu.isOn = true;
 		}
 		
 	}
