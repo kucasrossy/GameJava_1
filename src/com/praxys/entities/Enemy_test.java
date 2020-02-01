@@ -88,8 +88,12 @@ public class Enemy_test extends Entity {
 		Rectangle enemy = new Rectangle(this.getX(), this.getY(), 16,16);
 		Rectangle player = new Rectangle(Game.player.getX(),Game.player.getY(),16,16);
 		
+		if(enemy.intersects(player) && this.z == Game.player.z) {
+			return true;
+		}
 		
-		return enemy.intersects(player);
+		
+		return false;
 	}
 	
 	public void render(Graphics g) {

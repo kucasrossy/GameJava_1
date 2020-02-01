@@ -1,5 +1,6 @@
 package com.praxys.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -35,6 +36,12 @@ public class Player extends Entity{
 	public boolean hasGun;
 	public boolean shooting;
 	
+	public boolean jump = false;
+	public boolean isJump = false;
+	public boolean jumpUp = false;
+	public boolean jumpDown = false;
+	public int jumpFrame = 25,jumpCur = 0,spdJump = 2;
+	
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
 		
@@ -52,6 +59,32 @@ public class Player extends Entity{
 	public void tick() {
 		moved = false;
 		isDamaged = false;
+		
+		if(jump) {
+			if(isJump == false) {
+				jump = false;
+				isJump = true;
+				jumpUp = true;
+			}
+		}
+		
+		if(isJump) {
+			if(jumpUp) {
+				jumpCur+= spdJump;
+			}else if(jumpDown) {
+				jumpCur-= spdJump;
+				if(jumpCur <= 0) {
+					isJump = false;
+					jumpUp = false;
+					jumpDown = false;
+				}
+			}
+			z = jumpCur;
+			if(jumpCur >= jumpFrame) {
+				jumpUp = false;
+				jumpDown = true;
+			}
+		}
 		
 		if(direita && Word.isFree(x+vel,y)) {
 			moved = true;
@@ -154,18 +187,23 @@ public class Player extends Entity{
 	public void render(Graphics g) {
 		if(!isDamaged) {
 			if(dir == dir_direita) {
-				g.drawImage(spriteDir[index], getX() - Camera.x, getY() - Camera.y, null);
+				g.drawImage(spriteDir[index], getX() - Camera.x, getY() - Camera.y - z, null);
 				if(hasGun) {
-					g.drawImage(Entity.gun_Right,getX()+8 - Camera.x,getY() - Camera.y, null);
+					g.drawImage(Entity.gun_Right,getX()+8 - Camera.x,getY() - Camera.y - z, null);
 				}
 			}else if(dir == dir_esquerda) {
-				g.drawImage(spriteEsq[index], getX() - Camera.x, getY() - Camera.y, null);
+				g.drawImage(spriteEsq[index], getX() - Camera.x, getY() - Camera.y - z, null);
 				if(hasGun) {
-					g.drawImage(Entity.gun_Left,getX()-8 - Camera.x,getY() - Camera.y, null);
+					g.drawImage(Entity.gun_Left,getX()-8 - Camera.x,getY() - Camera.y - z, null);
 				}
 			}
 		}else {
-			g.drawImage(damage,getX() - Camera.x,getY() - Camera.y,null);
+			g.drawImage(damage,getX() - Camera.x,getY() - Camera.y - z,null);
+		}
+		
+		if(isJump) {
+			g.setColor(new Color(0,0,0,50));
+			g.fillOval(getX() - Camera.x + 4 , getY() - Camera.y + 16 ,8,8);
 		}
 	}
 

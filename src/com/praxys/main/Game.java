@@ -271,6 +271,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			menu.isOn = true;
 		}
 		
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.jump = true;
+		}
+		
 	}
 
 	@Override

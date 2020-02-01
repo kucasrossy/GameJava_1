@@ -101,10 +101,19 @@ public class Word {
 		int x4 = (xNext + Tile_Size-1)/Tile_Size;
 		int y4 = (yNext+Tile_Size-1)/Tile_Size;
 		
-		return !(tiles[x1 + (y1 * Word.WIDTH)] instanceof WallTile ||
+		
+		if(!(tiles[x1 + (y1 * Word.WIDTH)] instanceof WallTile ||
 				 tiles[x2 + (y2 * Word.WIDTH)] instanceof WallTile ||
 				 tiles[x3 + (y3 * Word.WIDTH)] instanceof WallTile ||
-				 tiles[x4 + (y4 * Word.WIDTH)] instanceof WallTile);
+				 tiles[x4 + (y4 * Word.WIDTH)] instanceof WallTile)) {
+			return true;
+		}
+		
+		if(Game.player.getZ() > 0) {
+			return true; 
+		}
+		
+		return false;
 	}
 	
 	public static void restarGame(String word) {

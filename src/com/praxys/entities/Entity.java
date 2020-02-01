@@ -20,6 +20,7 @@ public class Entity {
 	
 	protected int x;
 	protected int y;
+	protected int z;
 	protected int width;
 	protected int height;
 	
@@ -63,6 +64,10 @@ public class Entity {
 		return y;
 	}
 	
+	public int getZ() {
+		return z;
+	}
+	
 	protected int getWidth() {
 		return width;
 	}
@@ -75,7 +80,11 @@ public class Entity {
 		Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskX,e1.getY()+e1.maskY,e1.maskW,e1.maskH);
 		Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskX,e2.getY()+e2.maskY,e2.maskW,e2.maskH);
 		
-		return e1Mask.intersects(e2Mask);
+		if(e1Mask.intersects(e2Mask) && e1.z == e2.z) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void tick() {
